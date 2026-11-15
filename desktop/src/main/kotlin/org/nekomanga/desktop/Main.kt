@@ -13,6 +13,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import android.content.DesktopContext
+import org.nekomanga.BuildConfig
+import org.nekomanga.R
 
 fun main() = application {
   Window(
@@ -27,8 +30,10 @@ fun main() = application {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-          Text("Neko Desktop", style = MaterialTheme.typography.headlineLarge)
-          Text("Windows port skeleton", style = MaterialTheme.typography.bodyLarge)
+          // Strings come from upstream's own strings.xml through the Android resource shim.
+          Text(DesktopContext.getString(R.string.app_name), style = MaterialTheme.typography.headlineLarge)
+          Text("Desktop port ${BuildConfig.VERSION_NAME} (shared core build)", style = MaterialTheme.typography.bodyLarge)
+          Text(DesktopContext.getString(R.string.library), style = MaterialTheme.typography.bodyMedium)
         }
       }
     }
