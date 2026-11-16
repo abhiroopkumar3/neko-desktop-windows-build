@@ -15,7 +15,7 @@ open class Application : Context() {
   }
   fun registerActivityLifecycleCallbacks(cb: ActivityLifecycleCallbacks) {}
   fun unregisterActivityLifecycleCallbacks(cb: ActivityLifecycleCallbacks) {}
-  fun getProcessName(): String = "neko"
+  companion object { @JvmStatic fun getProcessName(): String = "neko" }
   open fun onCreate() {}
   open fun onTerminate() {}
 }

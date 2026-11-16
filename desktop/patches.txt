@@ -5,3 +5,9 @@
 * ::: ImageRequest\.Builder\((?:[\w.]*[cC]ontext(?:\.current)?)\) ::: ImageRequest.Builder(coil3.PlatformContext.INSTANCE)
 CoilSetup.kt ::: ImageLoader\.Builder\(context\) ::: ImageLoader.Builder(coil3.PlatformContext.INSTANCE)
 CoilSetup.kt ::: maxSizePercent\(context, ::: maxSizePercent(coil3.PlatformContext.INSTANCE,
+ComikeyHandler.kt ::: userAgentString = headers\["User-Agent"\] ::: userAgentString = headers["User-Agent"] ?: ""
+Comix.kt ::: userAgentString = headers\["User-Agent"\] ::: userAgentString = headers["User-Agent"] ?: ""
+AppModule.kt ::: (?s)Room\.databaseBuilder\(app, AppDatabase::class\.java, AppDatabase\.DATABASE_NAME\).*?\.build\(\) ::: org.nekomanga.desktop.platform.DesktopDatabase.open()
+AppModule.kt ::: import org\.nekomanga\.data\.database\.migration\.DatabaseMigrations ::: // desktop: no legacy Android migration
+WebViewUtil.kt ::: settings\.userAgentString = null ::: settings.userAgentString = ""
+SaveImageNotifier.kt ::: import coil3\.toBitmap ::: import org.nekomanga.desktop.compat.toBitmap

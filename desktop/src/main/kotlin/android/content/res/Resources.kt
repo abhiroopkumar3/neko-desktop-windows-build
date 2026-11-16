@@ -10,6 +10,7 @@ import org.w3c.dom.Element
  * ids come from the generated org.nekomanga.R.
  */
 class Resources private constructor() {
+  class Theme
   private val strings = HashMap<String, String>()
   private val plurals = HashMap<String, Map<String, String>>()
   private val arrays = HashMap<String, List<String>>()

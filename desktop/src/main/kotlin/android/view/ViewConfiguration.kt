@@ -9,6 +9,7 @@ class ViewConfiguration private constructor() {
   val scaledMaximumFlingVelocity: Int = 8000
   companion object {
     @JvmStatic fun get(context: Context) = ViewConfiguration()
+    @JvmStatic fun getScrollBarFadeDuration() = 250
     @JvmStatic fun getLongPressTimeout() = 500
     @JvmStatic fun getDoubleTapTimeout() = 300
     @JvmStatic fun getTapTimeout() = 100

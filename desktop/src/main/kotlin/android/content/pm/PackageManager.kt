@@ -9,7 +9,8 @@ class PackageManager {
   class NameNotFoundException : Exception()
   fun hasSystemFeature(name: String): Boolean = true
   fun getPackageInfo(pkg: String, flags: Int): PackageInfo = PackageInfo()
-  fun getLaunchIntentForPackage(pkg: String): android.content.Intent? = null
+  fun getLaunchIntentForPackage(pkg: String): android.content.Intent = android.content.Intent()
+  fun canRequestPackageInstalls(): Boolean = true
   fun resolveActivity(intent: android.content.Intent, flags: Int): ResolveInfo? = null
   companion object {
     const val PERMISSION_GRANTED = 0

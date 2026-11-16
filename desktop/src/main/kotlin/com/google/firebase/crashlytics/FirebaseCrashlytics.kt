@@ -5,8 +5,7 @@ class FirebaseCrashlytics private constructor() {
   fun recordException(t: Throwable) {}
   fun log(msg: String) {}
   fun setCustomKey(k: String, v: String) {}
-  fun setCrashlyticsCollectionEnabled(v: Boolean) {}
   fun sendUnsentReports() {}
-  val isCrashlyticsCollectionEnabled: Boolean get() = false
+  var isCrashlyticsCollectionEnabled: Boolean = false
   companion object { private val i = FirebaseCrashlytics(); @JvmStatic fun getInstance() = i }
 }

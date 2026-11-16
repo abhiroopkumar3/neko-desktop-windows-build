@@ -34,6 +34,8 @@ open class Context {
     else -> throw IllegalStateException("No desktop service for ${cls.name}")
   } as T
 
+  fun checkSelfPermission(permission: String): Int = 0
+
   open fun getSystemService(name: String): Any? = when (name) {
     NOTIFICATION_SERVICE -> android.app.NotificationManager()
     CONNECTIVITY_SERVICE -> connectivity

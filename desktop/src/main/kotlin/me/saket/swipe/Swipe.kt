@@ -38,8 +38,6 @@ class SwipeAction(
     val weight: Double = 1.0,
     val isUndo: Boolean = false,
 ) {
-  constructor(icon: @Composable () -> Unit, background: Color, weight: Double = 1.0, isUndo: Boolean = false, onSwipe: () -> Unit) :
-      this(onSwipe, icon, background, weight, isUndo)
   constructor(icon: androidx.compose.ui.graphics.painter.Painter, background: Color, weight: Double = 1.0, isUndo: Boolean = false, onSwipe: () -> Unit) :
       this(onSwipe, { androidx.compose.foundation.Image(icon, contentDescription = null) }, background, weight, isUndo)
 }

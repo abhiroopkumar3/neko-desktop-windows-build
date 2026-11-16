@@ -1,0 +1,5 @@
+app/eu/kanade/tachiyomi/data/database/models/Manga.kt
+app/eu/kanade/tachiyomi/data/database/models/Chapter.kt
+app/eu/kanade/tachiyomi/data/database/models/History.kt
+app/eu/kanade/tachiyomi/data/database/models/MangaChapterHistory.kt
+app/eu/kanade/tachiyomi/data/download/DownloadManager.kt

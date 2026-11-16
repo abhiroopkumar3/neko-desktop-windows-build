@@ -31,6 +31,7 @@ val sharedList =
 val syncSharedSources by
     tasks.registering(Sync::class) {
       into(layout.buildDirectory.dir("shared-src"))
+      inputs.file("patches.txt")
       sharedRoots.forEach { (module, dir) ->
         val includes = sharedList.filter { it.startsWith("$module/") }.map { it.removePrefix("$module/") }
         if (includes.isNotEmpty()) from(dir) { include(includes) }
@@ -77,7 +78,7 @@ val generateRShim by
       inputs.files(imageResDirs)
       outputs.dir(outDir)
       doLast {
-        val names = mapOf("string" to sortedSetOf<String>(), "plurals" to sortedSetOf<String>(), "array" to sortedSetOf<String>(), "color" to sortedSetOf<String>(), "drawable" to sortedSetOf<String>(), "mipmap" to sortedSetOf<String>(), "style" to sortedSetOf<String>(), "attr" to sortedSetOf<String>())
+        val names = mapOf("string" to sortedSetOf<String>(), "plurals" to sortedSetOf<String>(), "array" to sortedSetOf<String>(), "color" to sortedSetOf<String>(), "drawable" to sortedSetOf<String>(), "mipmap" to sortedSetOf<String>(), "style" to sortedSetOf<String>(), "attr" to sortedSetOf<String>(), "font" to sortedSetOf<String>())
         val tagToType = mapOf("string" to "string", "plurals" to "plurals", "string-array" to "array", "color" to "color")
         val factory = javax.xml.parsers.DocumentBuilderFactory.newInstance()
         resValueFiles.forEach { (f, _) ->
@@ -108,7 +109,8 @@ val generateRShim by
           val type = if (d.name.startsWith("mipmap")) "mipmap" else "drawable"
           d.listFiles()?.forEach { f -> names.getValue(type).add(f.nameWithoutExtension.replace('.', '_')) }
         }
-        val bases = mapOf("string" to 0x7f120000, "plurals" to 0x7f130000, "array" to 0x7f030000, "color" to 0x7f060000, "drawable" to 0x7f080000, "mipmap" to 0x7f0d0000, "style" to 0x7f140000, "attr" to 0x7f010000)
+        File(appResDir, "font").listFiles { f -> f.extension == "ttf" || f.extension == "otf" }?.forEach { names.getValue("font").add(it.nameWithoutExtension) }
+        val bases = mapOf("string" to 0x7f120000, "plurals" to 0x7f130000, "array" to 0x7f030000, "color" to 0x7f060000, "drawable" to 0x7f080000, "mipmap" to 0x7f0d0000, "style" to 0x7f140000, "attr" to 0x7f010000, "font" to 0x7f090000)
         val dir = outDir.get().asFile.also { it.deleteRecursively(); it.mkdirs() }
         // Upstream has one R class per Gradle module; they all see the same ids here.
         listOf("org.nekomanga", "org.nekomanga.core", "org.nekomanga.constants").forEach { pkg ->
@@ -139,6 +141,7 @@ val generateRShim by
 tasks.processResources {
   resValueFiles.forEach { (f, name) -> from(f) { into("android-res"); rename { name } } }
   imageResDirs.forEach { d -> from(d) { into("android-res/img/${d.name}") } }
+  from(File(appResDir, "font")) { include("*.ttf", "*.otf"); into("android-res/font") }
   from("../app/src/main/assets") { into("android-assets") }
 }
 

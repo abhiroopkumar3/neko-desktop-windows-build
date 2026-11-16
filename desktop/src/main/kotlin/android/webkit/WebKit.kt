@@ -7,7 +7,8 @@ import java.io.InputStream
 import java.util.concurrent.ConcurrentHashMap
 
 class WebSettings {
-  var userAgentString: String? = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
+  fun setSupportZoom(v: Boolean) {}
+  var userAgentString: String = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
   var javaScriptEnabled = false
   var domStorageEnabled = false
   var blockNetworkImage = false
@@ -23,7 +24,7 @@ class WebSettings {
   var setSupportZoom = true
   var builtInZoomControls = false
   var displayZoomControls = true
-  companion object { const val LOAD_DEFAULT = -1; const val LOAD_NO_CACHE = 2; const val MIXED_CONTENT_ALWAYS_ALLOW = 0 }
+  companion object { @JvmStatic fun getDefaultUserAgent(context: android.content.Context?): String = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"; const val LOAD_DEFAULT = -1; const val LOAD_NO_CACHE = 2; const val MIXED_CONTENT_ALWAYS_ALLOW = 0 }
 }
 
 interface WebResourceRequest {

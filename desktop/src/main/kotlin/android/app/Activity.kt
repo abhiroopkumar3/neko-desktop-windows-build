@@ -8,7 +8,9 @@ import android.view.Window
 open class Activity : android.content.ContextWrapper(null), androidx.lifecycle.LifecycleOwner {
   override val lifecycle: androidx.lifecycle.Lifecycle = androidx.lifecycle.LifecycleRegistry(this).also { it.currentState = androidx.lifecycle.Lifecycle.State.RESUMED }
   open fun finishAffinity() {}
+  var composeContent: (@androidx.compose.runtime.Composable () -> Unit)? = null
   open fun recreate() {}
+  open fun finishAfterTransition() {}
   open var intent: Intent = Intent()
   open var title: CharSequence = ""
   val window: Window = Window()

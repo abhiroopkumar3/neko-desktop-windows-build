@@ -29,6 +29,14 @@ for rnd in range(1, MAX_ROUNDS + 1):
     if not bad_files:
         print("failed without attributable file errors:\n" + "\n".join(text.splitlines()[-40:])); sys.exit(1)
     drop = {e for rel in bad_files for e in resolve(rel, current)}
+    protect = {l.strip() for l in open("tools/protect.txt")} if os.path.exists("tools/protect.txt") else set()
+    hit = drop & protect
+    if hit:
+        print("protected files fail, fix these first:")
+        for line in text.splitlines():
+            m = ERR.match(line)
+            if m and any(h.split("/", 1)[1] == m.group(1) for h in hit): print("  " + line.split("/build/shared-src/")[-1][:200])
+        sys.exit(2)
     if not drop:
         print("could not map failing files to list entries:", sorted(bad_files)[:5]); sys.exit(1)
     open(LIST, "w").write("\n".join(sorted(set(current) - drop)) + "\n")

@@ -34,3 +34,6 @@ object ColorUtils {
   }
   @JvmStatic fun colorToHSL(color: Int, hsl: FloatArray) = RGBToHSL(color.red, color.green, color.blue, hsl)
 }
+
+fun createBitmap(width: Int, height: Int, config: android.graphics.Bitmap.Config = android.graphics.Bitmap.Config.ARGB_8888): android.graphics.Bitmap =
+    android.graphics.Bitmap.createBitmap(width, height, config)

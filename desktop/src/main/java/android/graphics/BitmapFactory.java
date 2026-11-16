@@ -14,6 +14,7 @@ public final class BitmapFactory {
         public int outWidth = 0;
         public int outHeight = 0;
         public String outMimeType = null;
+        public Bitmap.Config outConfig = Bitmap.Config.ARGB_8888;
     }
 
     public static Bitmap decodeStream(InputStream stream) { return decodeStream(stream, null, null); }
