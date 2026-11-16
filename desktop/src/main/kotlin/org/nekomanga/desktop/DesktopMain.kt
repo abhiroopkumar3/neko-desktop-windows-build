@@ -41,13 +41,13 @@ import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.ui.res.stringResource
 import eu.kanade.tachiyomi.ui.main.MainActivityViewModel
-import eu.kanade.tachiyomi.ui.main.SideNavMode
+import eu.kanade.tachiyomi.ui.main.states.SideNavMode
 import org.nekomanga.R
 import org.nekomanga.presentation.components.dialog.AppUpdateDialog
 import org.nekomanga.presentation.screens.MainScreen
 import org.nekomanga.presentation.screens.Screens
 import org.nekomanga.presentation.screens.main.BottomBar
-import org.nekomanga.presentation.screens.main.NavigationItem
+import eu.kanade.tachiyomi.ui.main.NavigationItem
 import org.nekomanga.presentation.screens.main.NavigationSideBar
 import org.nekomanga.presentation.theme.NekoTheme
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -75,7 +75,7 @@ fun main() {
 }
 
 /** The desktop twin of MainActivity's compose content: starting screen, rail or bottom bar, MainScreen. */
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, androidx.compose.ui.ExperimentalComposeUiApi::class)
 @Composable
 private fun DesktopShell() {
   val viewModel = remember { MainActivityViewModel() }
@@ -159,6 +159,7 @@ private fun DesktopShell() {
 }
 
 /** Mouse back button (button 4) goes back, like Esc. */
+@OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
 private fun Modifier.backNavigation(): Modifier =
     pointerInput(Unit) {
       awaitPointerEventScope {
