@@ -123,6 +123,7 @@ val generateRShim by
 tasks.processResources {
   resValueFiles.forEach { (f, name) -> from(f) { into("android-res"); rename { name } } }
   imageResDirs.forEach { d -> from(d) { into("android-res/img/${d.name}") } }
+  from("../app/src/main/assets") { into("android-assets") }
 }
 
 kotlin {

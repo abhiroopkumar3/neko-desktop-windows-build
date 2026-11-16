@@ -1,6 +1,6 @@
 package android.app
 
-class Notification {
+class Notification(val channelId: String? = null, val title: CharSequence? = null, val text: CharSequence? = null, val contentIntent: PendingIntent? = null) {
   companion object {
     const val VISIBILITY_PUBLIC = 1
     const val VISIBILITY_PRIVATE = 0

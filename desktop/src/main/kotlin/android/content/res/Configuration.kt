@@ -9,6 +9,8 @@ class Configuration(
     var orientation: Int = ORIENTATION_LANDSCAPE,
     var uiMode: Int = 0,
 ) {
+  fun setTo(o: Configuration) { screenWidthDp = o.screenWidthDp; screenHeightDp = o.screenHeightDp; orientation = o.orientation; uiMode = o.uiMode; layoutDirection = o.layoutDirection }
+  fun updateFrom(o: Configuration) = setTo(o)
   var layoutDirection: Int = LAYOUT_DIRECTION_LTR
   var smallestScreenWidthDp: Int = minOf(screenWidthDp, screenHeightDp)
   var fontScale: Float = 1f

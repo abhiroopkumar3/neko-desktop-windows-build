@@ -34,10 +34,11 @@ open class Context {
 
   val contentResolver: ContentResolver get() = ContentResolver
   val packageManager: android.content.pm.PackageManager get() = android.content.pm.PackageManager()
-  open val assets: Any? get() = null
+  open val assets: android.content.res.AssetManager get() = android.content.res.AssetManager
   fun getDrawable(id: Int): android.graphics.drawable.Drawable? = null
   fun obtainStyledAttributes(attrs: IntArray): android.content.res.TypedArray = android.content.res.TypedArray(attrs)
   val theme: Any? get() = null
+  fun getDatabasePath(name: String): File = File(File(AppPaths.home, "databases").also { it.mkdirs() }, name)
   val applicationInfo: android.content.pm.ApplicationInfo get() = android.content.pm.ApplicationInfo()
   fun getExternalFilesDir(type: String?): File? = File(AppPaths.files, type ?: "external").also { it.mkdirs() }
 

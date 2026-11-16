@@ -8,5 +8,5 @@ object Settings {
   const val EXTRA_APP_PACKAGE = "android.provider.extra.APP_PACKAGE"
   const val EXTRA_CHANNEL_ID = "android.provider.extra.CHANNEL_ID"
   object Secure { @JvmStatic fun getString(r: Any?, name: String): String? = null }
-  object Global { @JvmStatic fun getString(r: Any?, name: String): String? = null; @JvmStatic fun getInt(r: Any?, name: String, d: Int) = d }
+  object Global { @JvmStatic fun getString(r: Any?, name: String): String? = null; @JvmStatic fun getInt(r: Any?, name: String, d: Int) = d; @JvmStatic fun getFloat(r: Any?, name: String, d: Float) = d; const val ANIMATOR_DURATION_SCALE = "animator_duration_scale" }
 }

@@ -1,5 +1,6 @@
 package androidx.work
 
+import android.app.Notification
 import android.content.Context
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
@@ -90,7 +91,7 @@ class WorkInfo(val id: UUID, val state: State, val tags: Set<String>, val progre
     val isFinished: Boolean get() = this == SUCCEEDED || this == FAILED || this == CANCELLED }
 }
 
-class ForegroundInfo(val notificationId: Int, val notification: androidx.core.app.Notification, val foregroundServiceType: Int = 0)
+class ForegroundInfo(val notificationId: Int, val notification: android.app.Notification, val foregroundServiceType: Int = 0)
 
 class WorkerParameters internal constructor(val id: UUID, val inputData: Data, val tags: Set<String>, val runAttemptCount: Int)
 

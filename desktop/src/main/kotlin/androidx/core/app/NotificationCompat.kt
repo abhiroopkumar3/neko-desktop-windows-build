@@ -1,13 +1,13 @@
 package androidx.core.app
 
 import android.app.PendingIntent
+import android.app.Notification
 import android.content.Context
 
 /**
  * Collects what upstream asks to show; the desktop notification service (tray/toast) reads
  * [Notification] objects. Builder methods are chainable like the Android class.
  */
-class Notification(val channelId: String?, val title: CharSequence?, val text: CharSequence?, val contentIntent: PendingIntent?)
 
 object NotificationCompat {
   const val PRIORITY_MIN = -2

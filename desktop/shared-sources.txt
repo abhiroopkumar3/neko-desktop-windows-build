@@ -39,6 +39,7 @@ app/eu/kanade/tachiyomi/source/model/Page.kt
 app/eu/kanade/tachiyomi/source/model/ResultListPage.kt
 app/eu/kanade/tachiyomi/source/online/Logout.kt
 app/eu/kanade/tachiyomi/source/online/merged/comix/ComixCipher.kt
+app/eu/kanade/tachiyomi/source/online/merged/comix/ComixDescrambler.kt
 app/eu/kanade/tachiyomi/source/online/merged/comix/ComixWafSolver.kt
 app/eu/kanade/tachiyomi/source/online/merged/kagane/KaganeLang.kt
 app/eu/kanade/tachiyomi/source/online/merged/komga/KomgaDto.kt
@@ -96,6 +97,7 @@ app/eu/kanade/tachiyomi/util/JsoupExtensions.kt
 app/eu/kanade/tachiyomi/util/PkceUtil.kt
 app/eu/kanade/tachiyomi/util/lang/EnumExtensions.kt
 app/eu/kanade/tachiyomi/util/lang/ThrowableExtensions.kt
+app/eu/kanade/tachiyomi/util/manga/MangaMappings.kt
 app/eu/kanade/tachiyomi/util/storage/FileExtensions.kt
 app/eu/kanade/tachiyomi/util/storage/OkioExtensions.kt
 app/eu/kanade/tachiyomi/util/storage/UriExtensions.kt
@@ -103,6 +105,7 @@ app/eu/kanade/tachiyomi/util/system/BooleanExtensions.kt
 app/eu/kanade/tachiyomi/util/system/CombineHelpers.kt
 app/eu/kanade/tachiyomi/util/system/DateExtensions.kt
 app/eu/kanade/tachiyomi/util/system/DeviceUtil.kt
+app/eu/kanade/tachiyomi/util/system/GLUtil.kt
 app/eu/kanade/tachiyomi/util/system/IntentExtensions.kt
 app/eu/kanade/tachiyomi/util/system/LongExtensions.kt
 app/eu/kanade/tachiyomi/util/system/NumberExtensions.kt

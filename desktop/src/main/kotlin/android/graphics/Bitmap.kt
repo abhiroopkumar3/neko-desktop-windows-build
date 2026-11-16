@@ -23,6 +23,12 @@ class Bitmap(val image: BufferedImage) {
     image.getRGB(x, y, w, h, pixels, offset, stride)
   }
   fun copy(config: Config, mutable: Boolean): Bitmap = createBitmap(this)
+  val colorSpace: ColorSpace? get() = ColorSpace.get(ColorSpace.Named.SRGB)
+  val isMutable: Boolean get() = true
+  val byteCount: Int get() = width * height * 4
+  val allocationByteCount: Int get() = byteCount
+  fun setHasAlpha(v: Boolean) {}
+  fun eraseColor(color: Int) { val g = image.createGraphics(); g.composite = java.awt.AlphaComposite.Src; g.color = java.awt.Color(color, true); g.fillRect(0, 0, width, height); g.dispose() }
 
   fun compress(format: CompressFormat, quality: Int, out: OutputStream): Boolean {
     val (name, flat) = when (format) {
@@ -45,6 +51,17 @@ class Bitmap(val image: BufferedImage) {
 
   companion object {
     @JvmStatic fun createBitmap(w: Int, h: Int, config: Config): Bitmap = Bitmap(BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB)).also { it.config = config }
+    @JvmStatic fun createBitmap(w: Int, h: Int, config: Config, hasAlpha: Boolean, cs: ColorSpace?): Bitmap = createBitmap(w, h, config)
+    @JvmStatic fun createBitmap(src: Bitmap, x: Int, y: Int, w: Int, h: Int, m: Matrix?, filter: Boolean): Bitmap {
+      val t = m?.toTransform() ?: java.awt.geom.AffineTransform()
+      val sub = src.image.getSubimage(x, y, w, h)
+      val bounds = t.createTransformedShape(java.awt.Rectangle(0, 0, w, h)).bounds
+      val out = BufferedImage(bounds.width.coerceAtLeast(1), bounds.height.coerceAtLeast(1), BufferedImage.TYPE_INT_ARGB)
+      val g = out.createGraphics()
+      g.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, if (filter) java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR else java.awt.RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR)
+      g.translate(-bounds.x, -bounds.y); g.drawImage(sub, t, null); g.dispose()
+      return Bitmap(out)
+    }
     @JvmStatic fun createBitmap(src: Bitmap): Bitmap = Bitmap(BufferedImage(src.width, src.height, BufferedImage.TYPE_INT_ARGB).also { it.createGraphics().apply { drawImage(src.image, 0, 0, null); dispose() } })
     @JvmStatic fun createBitmap(src: Bitmap, x: Int, y: Int, w: Int, h: Int): Bitmap =
         Bitmap(BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB).also { it.createGraphics().apply { drawImage(src.image.getSubimage(x, y, w, h), 0, 0, null); dispose() } })

@@ -5,19 +5,9 @@ import java.io.ByteArrayInputStream
 import java.io.InputStream
 import javax.imageio.ImageIO
 
-object BitmapFactory {
-  class Options {
-    var inJustDecodeBounds = false
-    var inSampleSize = 1
-    var inPreferredConfig: Bitmap.Config? = null
-    var inMutable = false
-    var outWidth = 0
-    var outHeight = 0
-    var outMimeType: String? = null
-  }
-
+object BitmapDecoding {
   @JvmStatic
-  fun decodeStream(stream: InputStream?, outPadding: Rect? = null, opts: Options? = null): Bitmap? {
+  fun decodeStream(stream: InputStream?, opts: BitmapFactory.Options?): Bitmap? {
     stream ?: return null
     return runCatching {
       ImageIO.createImageInputStream(stream).use { iis ->
@@ -39,13 +29,4 @@ object BitmapFactory {
     }.getOrNull()
   }
 
-  @JvmStatic fun decodeStream(stream: InputStream?): Bitmap? = decodeStream(stream, null, null)
-
-  @JvmStatic
-  fun decodeByteArray(data: ByteArray, offset: Int, length: Int, opts: Options? = null): Bitmap? =
-      decodeStream(ByteArrayInputStream(data, offset, length), null, opts)
-
-  @JvmStatic fun decodeByteArray(data: ByteArray, offset: Int, length: Int): Bitmap? = decodeByteArray(data, offset, length, null)
-
-  @JvmStatic fun decodeResource(res: Resources?, id: Int): Bitmap? = null
 }
