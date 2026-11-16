@@ -61,7 +61,7 @@ val generateRShim by
       inputs.files(imageResDirs)
       outputs.dir(outDir)
       doLast {
-        val names = mapOf("string" to sortedSetOf<String>(), "plurals" to sortedSetOf<String>(), "array" to sortedSetOf<String>(), "color" to sortedSetOf<String>(), "drawable" to sortedSetOf<String>(), "mipmap" to sortedSetOf<String>())
+        val names = mapOf("string" to sortedSetOf<String>(), "plurals" to sortedSetOf<String>(), "array" to sortedSetOf<String>(), "color" to sortedSetOf<String>(), "drawable" to sortedSetOf<String>(), "mipmap" to sortedSetOf<String>(), "style" to sortedSetOf<String>(), "attr" to sortedSetOf<String>())
         val tagToType = mapOf("string" to "string", "plurals" to "plurals", "string-array" to "array", "color" to "color")
         val factory = javax.xml.parsers.DocumentBuilderFactory.newInstance()
         resValueFiles.forEach { (f, _) ->
@@ -72,11 +72,27 @@ val generateRShim by
             names.getValue(type).add(e.getAttribute("name").replace('.', '_'))
           }
         }
+        // Styles (themes) and attrs: names only, they are ids for theme lookups.
+        appResDir.listFiles { f -> f.isDirectory && f.name.startsWith("values") }?.forEach { d ->
+          d.listFiles { f -> f.extension == "xml" }?.forEach { f ->
+            val doc = factory.newDocumentBuilder().parse(f).documentElement.childNodes
+            for (i in 0 until doc.length) {
+              val e = doc.item(i) as? org.w3c.dom.Element ?: continue
+              if (e.tagName == "style") names.getValue("style").add(e.getAttribute("name").replace('.', '_'))
+              if (e.tagName == "attr" || e.tagName == "declare-styleable") {
+                if (e.tagName == "attr") names.getValue("attr").add(e.getAttribute("name"))
+                val kids = e.childNodes
+                for (j in 0 until kids.length) (kids.item(j) as? org.w3c.dom.Element)?.takeIf { it.tagName == "attr" }?.let { names.getValue("attr").add(it.getAttribute("name").substringAfter(':')) }
+              }
+            }
+          }
+        }
+        listOf("colorPrimary", "colorSecondary", "colorOnBackground", "colorSurface", "colorPrimaryVariant", "colorAccent", "windowLightStatusBar", "colorOnSurface", "colorControlNormal", "colorBackground", "background", "selectableItemBackground", "textColorPrimary", "textColorSecondary", "actionBarSize", "statusBarColor", "colorError").forEach { names.getValue("attr").add(it) }
         imageResDirs.forEach { d ->
           val type = if (d.name.startsWith("mipmap")) "mipmap" else "drawable"
           d.listFiles()?.forEach { f -> names.getValue(type).add(f.nameWithoutExtension.replace('.', '_')) }
         }
-        val bases = mapOf("string" to 0x7f120000, "plurals" to 0x7f130000, "array" to 0x7f030000, "color" to 0x7f060000, "drawable" to 0x7f080000, "mipmap" to 0x7f0d0000)
+        val bases = mapOf("string" to 0x7f120000, "plurals" to 0x7f130000, "array" to 0x7f030000, "color" to 0x7f060000, "drawable" to 0x7f080000, "mipmap" to 0x7f0d0000, "style" to 0x7f140000, "attr" to 0x7f010000)
         val dir = outDir.get().asFile.also { it.deleteRecursively(); it.mkdirs() }
         // Upstream has one R class per Gradle module; they all see the same ids here.
         listOf("org.nekomanga", "org.nekomanga.core", "org.nekomanga.constants").forEach { pkg ->
@@ -125,6 +141,15 @@ kotlin {
         "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
         "-opt-in=kotlinx.coroutines.InternalCoroutinesApi",
         "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+        // Same opt-ins as upstream's app module.
+        "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+        "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
+        "-opt-in=androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi",
+        "-opt-in=androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
+        "-opt-in=androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
+        "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi",
+        "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+        "-opt-in=coil3.annotation.ExperimentalCoilApi",
         "-Xskip-prerelease-check",
     )
   }
@@ -141,9 +166,13 @@ ksp { arg("room.schemaLocation", layout.buildDirectory.dir("room-schemas").get()
 // Versions mirror the upstream Android catalogs (gradle/*.versions.toml).
 dependencies {
   implementation(compose.desktop.currentOs)
-  implementation(compose.material3)
+  // Upstream is on androidx material3 1.5.0-rc01 (expressive APIs); this is the matching JetBrains line.
+  implementation("org.jetbrains.compose.material3:material3:1.13.0-beta02")
+  implementation(compose.material)
+  implementation(compose.animation)
+  implementation("org.jetbrains.compose.animation:animation-graphics:1.12.2")
   implementation(compose.materialIconsExtended)
-  implementation("org.jetbrains.compose.material3:material3-window-size-class:1.9.0")
+  implementation("org.jetbrains.compose.material3:material3-window-size-class:1.13.0-beta02")
   implementation("org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose:2.11.0")
   implementation("org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose:2.11.0")
   implementation("androidx.navigation3:navigation3-runtime:1.2.1")
@@ -187,6 +216,14 @@ dependencies {
   implementation("androidx.room:room-runtime:$room")
   implementation("androidx.sqlite:sqlite-bundled:2.6.2")
   ksp("androidx.room:room-compiler:$room")
+
+  implementation("com.cheonjaeung.compose.grid:grid:2.9.0")
+  implementation("com.mikepenz:multiplatform-markdown-renderer:0.45.0")
+  implementation("com.mikepenz:multiplatform-markdown-renderer-m3:0.45.0")
+  implementation("com.mikepenz:multiplatform-markdown-renderer-coil3:0.45.0")
+  implementation("me.saket.telephoto:zoomable:0.19.0")
+  implementation("me.saket.telephoto:sub-sampling-image:0.19.0")
+  implementation("sh.calvin.reorderable:reorderable:3.1.0")
 
   val coil = "3.6.3"
   implementation("io.coil-kt.coil3:coil:$coil")

@@ -24,7 +24,35 @@ open class Context {
 
   fun getDir(name: String, mode: Int = 0): File = File(AppPaths.home, name).also { it.mkdirs() }
 
-  open fun getSystemService(name: String): Any? = null
+  open fun getSystemService(name: String): Any? = when (name) {
+    NOTIFICATION_SERVICE -> android.app.NotificationManager()
+    CONNECTIVITY_SERVICE -> connectivity
+    POWER_SERVICE -> android.os.PowerManager()
+    WIFI_SERVICE -> android.net.wifi.WifiManager()
+    else -> null
+  }
+
+  val contentResolver: ContentResolver get() = ContentResolver
+  val packageManager: android.content.pm.PackageManager get() = android.content.pm.PackageManager()
+  open val assets: Any? get() = null
+  fun getDrawable(id: Int): android.graphics.drawable.Drawable? = null
+  fun obtainStyledAttributes(attrs: IntArray): android.content.res.TypedArray = android.content.res.TypedArray(attrs)
+  val theme: Any? get() = null
+
+  /** Hands links and files to the Windows shell; in-app navigation goes through the navigator instead. */
+  open fun startActivity(intent: Intent) {
+    val uri = intent.data ?: return
+    runCatching {
+      when (uri.scheme) {
+        "http", "https", "mailto" -> java.awt.Desktop.getDesktop().browse(java.net.URI(uri.toString()))
+        "file" -> uri.path?.let { java.awt.Desktop.getDesktop().open(File(it)) }
+      }
+    }.onFailure { System.err.println("Could not open $uri: $it") }
+  }
+  fun startService(intent: Intent): Any? = null
+  fun sendBroadcast(intent: Intent) {}
+  fun registerReceiver(receiver: Any?, filter: Any?): Any? = null
+  fun unregisterReceiver(receiver: Any?) {}
 
   /** Per-name preference files under the app's data folder (see [FileSharedPreferences]). */
   fun getSharedPreferences(name: String, mode: Int = MODE_PRIVATE): SharedPreferences =
@@ -32,6 +60,11 @@ open class Context {
 
   companion object {
     const val MODE_PRIVATE = 0
+    const val NOTIFICATION_SERVICE = "notification"
+    const val CONNECTIVITY_SERVICE = "connectivity"
+    const val POWER_SERVICE = "power"
+    const val WIFI_SERVICE = "wifi"
+    private val connectivity by lazy { android.net.ConnectivityManager() }
     private val sharedPreferenceCache = java.util.concurrent.ConcurrentHashMap<String, SharedPreferences>()
   }
 }

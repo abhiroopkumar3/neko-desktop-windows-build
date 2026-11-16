@@ -103,9 +103,14 @@ class Resources private constructor() {
   fun getQuantityText(id: Int, quantity: Int): CharSequence = getQuantityString(id, quantity)
 
   fun getColor(id: Int, theme: Any? = null): Int {
+    val pastel = id - com.zedlabs.pastelplaceholder.Pastel.BASE
+    if (pastel in com.zedlabs.pastelplaceholder.Pastel.light.indices) return com.zedlabs.pastelplaceholder.Pastel.light[pastel]
     val n = name(id, RTable.COLOR_BASE, RTable.color)
     return colors[n] ?: throw NotFoundException("Color resource $n")
   }
+
+  val displayMetrics: android.util.DisplayMetrics by lazy { android.util.DisplayMetrics() }
+  val configuration: Configuration by lazy { Configuration() }
 
   companion object {
     val instance: Resources by lazy { Resources() }
