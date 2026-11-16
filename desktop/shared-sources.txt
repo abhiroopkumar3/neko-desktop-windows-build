@@ -81,6 +81,7 @@ app/eu/kanade/tachiyomi/ui/reader/settings/ReaderSliderPosition.kt
 app/eu/kanade/tachiyomi/ui/reader/settings/ReaderTheme.kt
 app/eu/kanade/tachiyomi/ui/reader/settings/ReadingModeType.kt
 app/eu/kanade/tachiyomi/ui/reader/viewer/ReaderColorFilter.kt
+app/eu/kanade/tachiyomi/ui/reader/viewer/ReaderKeyNavigation.kt
 app/eu/kanade/tachiyomi/ui/reader/viewer/ViewerNavigation.kt
 app/eu/kanade/tachiyomi/ui/reader/viewer/navigation/DisabledNavigation.kt
 app/eu/kanade/tachiyomi/ui/reader/viewer/navigation/EdgeNavigation.kt
@@ -97,9 +98,12 @@ app/eu/kanade/tachiyomi/util/lang/EnumExtensions.kt
 app/eu/kanade/tachiyomi/util/lang/ThrowableExtensions.kt
 app/eu/kanade/tachiyomi/util/storage/FileExtensions.kt
 app/eu/kanade/tachiyomi/util/storage/OkioExtensions.kt
+app/eu/kanade/tachiyomi/util/storage/UriExtensions.kt
 app/eu/kanade/tachiyomi/util/system/BooleanExtensions.kt
 app/eu/kanade/tachiyomi/util/system/CombineHelpers.kt
+app/eu/kanade/tachiyomi/util/system/DateExtensions.kt
 app/eu/kanade/tachiyomi/util/system/DeviceUtil.kt
+app/eu/kanade/tachiyomi/util/system/IntentExtensions.kt
 app/eu/kanade/tachiyomi/util/system/LongExtensions.kt
 app/eu/kanade/tachiyomi/util/system/NumberExtensions.kt
 app/eu/kanade/tachiyomi/util/view/DeferredField.kt
@@ -256,6 +260,7 @@ app/org/nekomanga/presentation/screens/EmptyScreenPreview.kt
 app/org/nekomanga/presentation/screens/about/AboutScreenState.kt
 app/org/nekomanga/presentation/screens/about/AboutTopAppBar.kt
 app/org/nekomanga/presentation/screens/category/AddEditCategoryTopBar.kt
+app/org/nekomanga/presentation/screens/feed/history/LastReadLine.kt
 app/org/nekomanga/presentation/screens/library/CategorySortButtons.kt
 app/org/nekomanga/presentation/screens/library/LibrarySort.kt
 app/org/nekomanga/presentation/screens/license/LicenseTopAppBar.kt
@@ -331,6 +336,7 @@ core/tachiyomi/core/network/ProgressResponseBody.kt
 core/tachiyomi/core/network/Requests.kt
 core/tachiyomi/core/network/interceptors/CleartextPolicyInterceptor.kt
 core/tachiyomi/core/preference/AndroidPreference.kt
+core/tachiyomi/core/preference/AndroidPreferenceStore.kt
 core/tachiyomi/core/preference/Preference.kt
 core/tachiyomi/core/preference/PreferenceStore.kt
 core/tachiyomi/core/util/lang/Hash.kt

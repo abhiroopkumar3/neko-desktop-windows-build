@@ -8,6 +8,9 @@ object DateUtils {
   const val WEEK_IN_MILLIS = 7 * DAY_IN_MILLIS
 
   @JvmStatic
+  fun getRelativeTimeSpanString(time: Long): CharSequence = getRelativeTimeSpanString(time, System.currentTimeMillis(), MINUTE_IN_MILLIS)
+
+  @JvmStatic
   fun getRelativeTimeSpanString(time: Long, now: Long, minResolution: Long): CharSequence {
     val diff = kotlin.math.abs(now - time)
     val past = now >= time

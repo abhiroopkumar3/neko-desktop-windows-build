@@ -16,6 +16,7 @@ open class Bundle() {
   fun putLongArray(k: String?, v: LongArray?) { map[k.orEmpty()] = v }
   fun putBundle(k: String?, v: Bundle?) { map[k.orEmpty()] = v }
 
+  fun get(k: String?): Any? = map[k]
   fun getString(k: String?): String? = map[k] as? String
   fun getString(k: String?, def: String): String = map[k] as? String ?: def
   fun getInt(k: String?, def: Int = 0): Int = map[k] as? Int ?: def

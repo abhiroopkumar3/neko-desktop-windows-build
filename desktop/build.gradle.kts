@@ -180,6 +180,7 @@ dependencies {
   implementation("androidx.annotation:annotation:1.11.0")
 
   val coroutines = "1.11.0"
+  implementation("org.json:json:20240303")
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines")
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:$coroutines")
   val serialization = "1.12.0"

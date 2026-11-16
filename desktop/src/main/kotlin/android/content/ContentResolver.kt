@@ -7,6 +7,9 @@ import java.io.OutputStream
 
 /** File-backed content resolver: only file URIs exist on desktop. */
 object ContentResolver {
+  const val SCHEME_CONTENT = "content"
+  const val SCHEME_FILE = "file"
+  const val SCHEME_ANDROID_RESOURCE = "android.resource"
   private fun file(uri: Uri) = File(uri.path.orEmpty().let { if (Regex("^/[A-Za-z]:.*").matches(it)) it.drop(1) else it })
   fun openInputStream(uri: Uri): InputStream? = runCatching { file(uri).inputStream() }.getOrNull()
   fun openOutputStream(uri: Uri): OutputStream? = runCatching { file(uri).outputStream() }.getOrNull()

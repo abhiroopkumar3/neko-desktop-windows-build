@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
  * process death); upstream already re-registers its periodic jobs at startup, which keeps working.
  */
 class Data private constructor(private val values: Map<String, Any?>) {
-  fun getString(k: String, def: String?): String? = values[k] as? String ?: def
+  fun getString(k: String, def: String? = null): String? = values[k] as? String ?: def
   fun getInt(k: String, def: Int): Int = values[k] as? Int ?: def
   fun getLong(k: String, def: Long): Long = values[k] as? Long ?: def
   fun getBoolean(k: String, def: Boolean): Boolean = values[k] as? Boolean ?: def
@@ -69,6 +69,8 @@ class Constraints private constructor(val requiredNetworkType: NetworkType, val 
     fun setRequiredNetworkType(t: NetworkType) = apply { network = t }
     fun setRequiresCharging(v: Boolean) = apply { charging = v }
     fun setRequiresBatteryNotLow(v: Boolean) = apply { battery = v }
+    fun setRequiresDeviceIdle(v: Boolean) = apply { }
+    fun setRequiresStorageNotLow(v: Boolean) = apply { }
     fun build() = Constraints(network, charging, battery)
   }
   companion object { @JvmField val NONE = Builder().build() }
@@ -164,6 +166,9 @@ class PeriodicWorkRequest internal constructor(id: UUID, cls: Class<out Listenab
 inline fun <reified W : ListenableWorker> OneTimeWorkRequestBuilder(): OneTimeWorkRequest.Builder = OneTimeWorkRequest.Builder(W::class.java)
 
 inline fun <reified W : ListenableWorker> PeriodicWorkRequestBuilder(repeatInterval: Long, repeatIntervalTimeUnit: TimeUnit): PeriodicWorkRequest.Builder =
+    PeriodicWorkRequest.Builder(W::class.java, repeatIntervalTimeUnit.toMillis(repeatInterval))
+
+inline fun <reified W : ListenableWorker> PeriodicWorkRequestBuilder(repeatInterval: Long, repeatIntervalTimeUnit: TimeUnit, flexTimeInterval: Long, flexTimeIntervalUnit: TimeUnit): PeriodicWorkRequest.Builder =
     PeriodicWorkRequest.Builder(W::class.java, repeatIntervalTimeUnit.toMillis(repeatInterval))
 
 class WorkManager private constructor() {

@@ -19,7 +19,7 @@ import kotlinx.serialization.json.longOrNull
 
 /** android.content.SharedPreferences contract. */
 interface SharedPreferences {
-  fun getAll(): Map<String, *>
+  val all: Map<String, *>
   fun getString(key: String?, defValue: String?): String?
   fun getStringSet(key: String?, defValues: Set<String>?): Set<String>?
   fun getInt(key: String?, defValue: Int): Int
@@ -78,7 +78,7 @@ class FileSharedPreferences(private val file: File) : SharedPreferences {
   }
 
   @Suppress("UNCHECKED_CAST")
-  override fun getAll(): Map<String, *> = synchronized(lock) { HashMap(data) }
+  override val all: Map<String, *> get() = synchronized(lock) { HashMap(data) }
   override fun getString(key: String?, defValue: String?) = synchronized(lock) { data[key] as? String ?: defValue }
   @Suppress("UNCHECKED_CAST")
   override fun getStringSet(key: String?, defValues: Set<String>?) = synchronized(lock) { (data[key] as? Set<String>)?.toSet() ?: defValues }

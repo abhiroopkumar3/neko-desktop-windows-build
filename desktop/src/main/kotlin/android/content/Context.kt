@@ -38,6 +38,8 @@ open class Context {
   fun getDrawable(id: Int): android.graphics.drawable.Drawable? = null
   fun obtainStyledAttributes(attrs: IntArray): android.content.res.TypedArray = android.content.res.TypedArray(attrs)
   val theme: Any? get() = null
+  val applicationInfo: android.content.pm.ApplicationInfo get() = android.content.pm.ApplicationInfo()
+  fun getExternalFilesDir(type: String?): File? = File(AppPaths.files, type ?: "external").also { it.mkdirs() }
 
   /** Hands links and files to the Windows shell; in-app navigation goes through the navigator instead. */
   open fun startActivity(intent: Intent) {
