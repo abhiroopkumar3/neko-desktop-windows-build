@@ -36,3 +36,14 @@ Add a shim or dependency, then re-run to see how many files come back.
 ./gradlew run                    # launch the app
 ./gradlew packageExe packageMsi  # Windows installers (on Windows; CI does this)
 ```
+
+## Phase 3 additions
+
+- **Room database**: KSP + Room 2.8.5 on the JVM with bundled SQLite. `DesktopDatabase.open()` builds the
+  unmodified upstream `AppDatabase` (schema v46). `androidx.room.util.performBlocking` is shimmed because the
+  JVM runtime only ships the suspending API. `gradlew dbSelfTest` inserts and reads a row (also run in CI).
+- **Preferences**: `SharedPreferences` is a JSON-file store (`%APPDATA%\Neko\prefs\*.json`) behind
+  `Context.getSharedPreferences` and `PreferenceManager`, so upstream preference classes work as-is.
+- **R classes**: generated for all three upstream packages (`org.nekomanga`, `.core`, `.constants`).
+- **MergeType**: desktop copy of the enum (upstream's lives in a file that drags in every merged source).
+  Keep ids/names in sync when upstream changes.

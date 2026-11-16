@@ -26,8 +26,13 @@ open class Context {
 
   open fun getSystemService(name: String): Any? = null
 
+  /** Per-name preference files under the app's data folder (see [FileSharedPreferences]). */
+  fun getSharedPreferences(name: String, mode: Int = MODE_PRIVATE): SharedPreferences =
+      sharedPreferenceCache.getOrPut(name) { FileSharedPreferences(File(File(AppPaths.home, "prefs"), "$name.json")) }
+
   companion object {
     const val MODE_PRIVATE = 0
+    private val sharedPreferenceCache = java.util.concurrent.ConcurrentHashMap<String, SharedPreferences>()
   }
 }
 

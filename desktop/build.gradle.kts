@@ -5,6 +5,7 @@ plugins {
   kotlin("plugin.serialization") version "2.4.21"
   id("org.jetbrains.kotlin.plugin.compose") version "2.4.21"
   id("org.jetbrains.compose") version "1.12.2"
+  id("com.google.devtools.ksp") version "2.3.13"
 }
 
 // ---------------------------------------------------------------------------
@@ -68,15 +69,18 @@ val generateRShim by
         }
         val bases = mapOf("string" to 0x7f120000, "plurals" to 0x7f130000, "array" to 0x7f030000, "color" to 0x7f060000)
         val dir = outDir.get().asFile.also { it.deleteRecursively(); it.mkdirs() }
-        File(dir, "R.kt").writeText(buildString {
-          appendLine("package org.nekomanga\n\n/** Generated from upstream value resources. Do not edit. */\nobject R {")
-          names.forEach { (type, set) ->
-            appendLine("  object $type {")
-            set.forEachIndexed { idx, n -> appendLine("    const val `$n`: Int = ${bases.getValue(type) + idx}") }
-            appendLine("  }")
-          }
-          appendLine("}")
-        })
+        // Upstream has one R class per Gradle module; they all see the same ids here.
+        listOf("org.nekomanga", "org.nekomanga.core", "org.nekomanga.constants").forEach { pkg ->
+          File(dir, "R_${pkg.replace('.', '_')}.kt").writeText(buildString {
+            appendLine("package $pkg\n\n/** Generated from upstream value resources. Do not edit. */\nobject R {")
+            names.forEach { (type, set) ->
+              appendLine("  object $type {")
+              set.forEachIndexed { idx, n -> appendLine("    const val `$n`: Int = ${bases.getValue(type) + idx}") }
+              appendLine("  }")
+            }
+            appendLine("}")
+          })
+        }
         File(dir, "RTable.kt").writeText(buildString {
           appendLine("package org.nekomanga.desktop.res\n\n/** Generated id tables. Do not edit. */\nobject RTable {")
           bases.forEach { (type, base) -> appendLine("  const val ${type.uppercase()}_BASE = $base") }
@@ -117,6 +121,12 @@ kotlin {
 }
 
 tasks.named("compileKotlin") { dependsOn(syncSharedSources, generateRShim) }
+
+// KSP (Room) reads the synced upstream sources too.
+tasks.matching { it.name == "kspKotlin" }.configureEach { dependsOn(syncSharedSources, generateRShim) }
+
+// Room needs a schema folder for exportSchema = true; keep generated schemas out of upstream.
+ksp { arg("room.schemaLocation", layout.buildDirectory.dir("room-schemas").get().asFile.path) }
 
 // Versions mirror the upstream Android catalogs (gradle/*.versions.toml).
 dependencies {
@@ -163,6 +173,11 @@ dependencies {
   implementation("com.jakewharton:disklrucache:2.0.2")
   implementation("org.tachiyomi:source-api:1.1")
 
+  val room = "2.8.5"
+  implementation("androidx.room:room-runtime:$room")
+  implementation("androidx.sqlite:sqlite-bundled:2.6.2")
+  ksp("androidx.room:room-compiler:$room")
+
   val coil = "3.6.3"
   implementation("io.coil-kt.coil3:coil:$coil")
   implementation("io.coil-kt.coil3:coil-compose:$coil")
@@ -191,4 +206,11 @@ compose.desktop {
       }
     }
   }
+}
+
+// Headless smoke test for the shared database layer (runs on any OS with a JDK).
+tasks.register<JavaExec>("dbSelfTest") {
+  group = "verification"
+  classpath = sourceSets["main"].runtimeClasspath
+  mainClass.set("org.nekomanga.desktop.selftest.DbSelfTestKt")
 }

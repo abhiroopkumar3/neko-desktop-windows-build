@@ -7,7 +7,7 @@ rounds. Run from the desktop/ directory:  python3 -I tools/prune.py
 import re, subprocess, sys, os
 
 LIST = "shared-sources.txt"
-ERR = re.compile(r"^e: file://.*?/build/shared-src/(.+?\.kt):\d+:\d+")
+ERR = re.compile(r"^e: (?:\[ksp\] )?(?:file://)?.*?/build/shared-src/(.+?\.kt):\d+(?::\d+)?")
 MAX_ROUNDS = int(sys.argv[1]) if len(sys.argv) > 1 else 15
 
 def entries():
@@ -19,7 +19,7 @@ def resolve(rel, current):
 
 for rnd in range(1, MAX_ROUNDS + 1):
     current = entries()
-    out = subprocess.run(["./gradlew", "--no-daemon", "-q", "compileKotlin"], capture_output=True, text=True)
+    out = subprocess.run(["./gradlew", "--no-daemon", "-q", "compileKotlin", "-x", "kspKotlin"], capture_output=True, text=True)
     text = out.stdout + out.stderr
     bad_files = {m.group(1) for line in text.splitlines() if (m := ERR.match(line))}
     other = [l for l in text.splitlines() if l.startswith("e: ") and not ERR.match(l)]

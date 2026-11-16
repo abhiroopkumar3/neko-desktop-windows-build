@@ -48,6 +48,11 @@ jobs:
         with:
           build-root-directory: desktop
 
+      - name: Database self-test (Room + bundled SQLite)
+        working-directory: desktop
+        shell: bash
+        run: ./gradlew --no-daemon dbSelfTest
+
       - name: Package installers
         run: ./gradlew --no-daemon packageExe packageMsi
 
