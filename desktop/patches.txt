@@ -11,3 +11,4 @@ AppModule.kt ::: (?s)Room\.databaseBuilder\(app, AppDatabase::class\.java, AppDa
 AppModule.kt ::: import org\.nekomanga\.data\.database\.migration\.DatabaseMigrations ::: // desktop: no legacy Android migration
 WebViewUtil.kt ::: settings\.userAgentString = null ::: settings.userAgentString = ""
 SaveImageNotifier.kt ::: import coil3\.toBitmap ::: import org.nekomanga.desktop.compat.toBitmap
+LicenseScreen.kt ::: R\.raw\.aboutlibraries ::: 0

@@ -467,6 +467,8 @@ app/org/nekomanga/domain/storage/StorageManager.kt
 app/org/nekomanga/domain/storage/StoragePreferences.kt
 app/org/nekomanga/domain/track/Track.kt
 app/org/nekomanga/domain/track/store/DelayedTrackingStore.kt
+app/org/nekomanga/presentation/InfoScreen.kt
+app/org/nekomanga/presentation/InfoScreenPreview.kt
 app/org/nekomanga/presentation/components/AppBarActions.kt
 app/org/nekomanga/presentation/components/AutoSizeText.kt
 app/org/nekomanga/presentation/components/ButtonGroup.kt
@@ -484,6 +486,7 @@ app/org/nekomanga/presentation/components/DownloadUnreadBadgePreview.kt
 app/org/nekomanga/presentation/components/ExpandableRow.kt
 app/org/nekomanga/presentation/components/ExpandableRowPreview.kt
 app/org/nekomanga/presentation/components/ExpressivePicker.kt
+app/org/nekomanga/presentation/components/FastScroller.kt
 app/org/nekomanga/presentation/components/FooterFilterChip.kt
 app/org/nekomanga/presentation/components/FooterFilterChipPreview.kt
 app/org/nekomanga/presentation/components/HeaderCard.kt
@@ -572,6 +575,7 @@ app/org/nekomanga/presentation/components/sheets/FilterChapterSheet.kt
 app/org/nekomanga/presentation/components/sheets/GroupBySheet.kt
 app/org/nekomanga/presentation/components/sheets/LibrarySortSheet.kt
 app/org/nekomanga/presentation/components/sheets/MergeSheet.kt
+app/org/nekomanga/presentation/components/sheets/TrackingDateSheet.kt
 app/org/nekomanga/presentation/components/sheets/TrackingSearchSheet.kt
 app/org/nekomanga/presentation/components/sheets/TrackingSheet.kt
 app/org/nekomanga/presentation/components/snackbar/Snackbar.kt
@@ -598,10 +602,15 @@ app/org/nekomanga/presentation/screens/EmptyScreen.kt
 app/org/nekomanga/presentation/screens/EmptyScreenPreview.kt
 app/org/nekomanga/presentation/screens/FeedScreen.kt
 app/org/nekomanga/presentation/screens/LibraryScreen.kt
+app/org/nekomanga/presentation/screens/LicenseScreen.kt
 app/org/nekomanga/presentation/screens/LoadingScreen.kt
+app/org/nekomanga/presentation/screens/MainScreen.kt
+app/org/nekomanga/presentation/screens/MangaScreen.kt
+app/org/nekomanga/presentation/screens/OnboardingScreen.kt
 app/org/nekomanga/presentation/screens/Screens.kt
 app/org/nekomanga/presentation/screens/SettingsScreen.kt
 app/org/nekomanga/presentation/screens/SimilarScreen.kt
+app/org/nekomanga/presentation/screens/StatsScreen.kt
 app/org/nekomanga/presentation/screens/WebViewScreen.kt
 app/org/nekomanga/presentation/screens/about/AboutScreenState.kt
 app/org/nekomanga/presentation/screens/about/AboutTopAppBar.kt
@@ -666,6 +675,7 @@ app/org/nekomanga/presentation/screens/manga/BackDrop.kt
 app/org/nekomanga/presentation/screens/manga/ButtonBlock.kt
 app/org/nekomanga/presentation/screens/manga/ChapterHeader.kt
 app/org/nekomanga/presentation/screens/manga/DescriptionBlock.kt
+app/org/nekomanga/presentation/screens/manga/DetailsBottomSheet.kt
 app/org/nekomanga/presentation/screens/manga/InformationBlock.kt
 app/org/nekomanga/presentation/screens/manga/MangaChapterListItem.kt
 app/org/nekomanga/presentation/screens/manga/MangaDetailsAppBarActions.kt
@@ -742,6 +752,7 @@ app/org/nekomanga/presentation/screens/similar/SimilarRepo.kt
 app/org/nekomanga/presentation/screens/similar/SimilarScreenState.kt
 app/org/nekomanga/presentation/screens/similar/SimilarTopBar.kt
 app/org/nekomanga/presentation/screens/similar/SimilarViewModel.kt
+app/org/nekomanga/presentation/screens/stats/DetailedStats.kt
 app/org/nekomanga/presentation/screens/stats/SimpleStats.kt
 app/org/nekomanga/presentation/screens/stats/StatsConstants.kt
 app/org/nekomanga/presentation/screens/stats/StatsHelper.kt

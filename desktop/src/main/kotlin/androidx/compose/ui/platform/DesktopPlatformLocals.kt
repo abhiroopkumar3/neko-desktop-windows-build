@@ -13,4 +13,3 @@ object LocalLifecycleOwner {
 
 val LocalResources: ProvidableCompositionLocal<android.content.res.Resources> = staticCompositionLocalOf { android.content.DesktopContext.resources }
 
-fun Modifier.systemGestureExclusion(): Modifier = this
