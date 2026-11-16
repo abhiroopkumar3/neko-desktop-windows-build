@@ -37,6 +37,11 @@ object DrawableLoader {
         .getOrNull()
   }
 
+  fun bitmapOrNull(id: Int): android.graphics.Bitmap? {
+    val (stream, _) = open(id, listOf("png", "webp", "jpg")) ?: return null
+    return runCatching { stream.use { javax.imageio.ImageIO.read(it) }?.let { android.graphics.Bitmap(it) } }.getOrNull()
+  }
+
   fun bitmap(id: Int): ImageBitmap? {
     val (stream, _) = open(id, listOf("png", "webp", "jpg")) ?: return null
     return runCatching { stream.use { loadImageBitmap(it) } }.getOrNull()

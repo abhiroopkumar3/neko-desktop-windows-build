@@ -1,0 +1,12 @@
+package com.google.firebase.crashlytics
+
+/** Crash reporting stays local on desktop: calls are accepted and dropped. */
+class FirebaseCrashlytics private constructor() {
+  fun recordException(t: Throwable) {}
+  fun log(msg: String) {}
+  fun setCustomKey(k: String, v: String) {}
+  fun setCrashlyticsCollectionEnabled(v: Boolean) {}
+  fun sendUnsentReports() {}
+  val isCrashlyticsCollectionEnabled: Boolean get() = false
+  companion object { private val i = FirebaseCrashlytics(); @JvmStatic fun getInstance() = i }
+}

@@ -5,6 +5,7 @@ import android.os.Bundle
 
 /** Data holder for Android's Intent. Desktop code routes intents through its own navigator. */
 open class Intent() {
+  var clipData: ClipData? = null
   var action: String? = null
   var data: Uri? = null
   var type: String? = null

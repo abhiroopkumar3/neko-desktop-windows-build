@@ -98,6 +98,7 @@ class Uri private constructor(
     val EMPTY: Uri = Uri(null, null, "", null, null)
     private val PATTERN = Regex("^(?:([A-Za-z][A-Za-z0-9+.-]*):)?(?://([^/?#]*))?([^?#]*)(?:\\?([^#]*))?(?:#(.*))?$", RegexOption.DOT_MATCHES_ALL)
 
+    @JvmStatic fun fromParts(scheme: String, ssp: String, fragment: String?): Uri = parse("$scheme:$ssp" + (fragment?.let { "#$it" } ?: ""))
     @JvmStatic fun parse(uriString: String): Uri {
       val m = PATTERN.matchEntire(uriString) ?: return Uri(null, null, uriString, null, null)
       val (scheme, auth, path, q, frag) = m.destructured

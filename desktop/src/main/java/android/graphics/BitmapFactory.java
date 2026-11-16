@@ -22,6 +22,8 @@ public final class BitmapFactory {
         return BitmapDecoding.decodeStream(stream, opts);
     }
 
+    public static Bitmap decodeResource(android.content.res.Resources res, int id) { return BitmapDecoding.decodeResource(res, id); }
+
     public static Bitmap decodeByteArray(byte[] data, int offset, int length) { return decodeByteArray(data, offset, length, null); }
 
     public static Bitmap decodeByteArray(byte[] data, int offset, int length, Options opts) {

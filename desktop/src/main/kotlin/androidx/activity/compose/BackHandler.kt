@@ -23,3 +23,8 @@ fun BackHandler(enabled: Boolean = true, onBack: () -> Unit) {
     onDispose { BackDispatcher.unregister(token) }
   }
 }
+
+/** Stand-in for ComponentActivity's dispatcher owner so `onBackPressed()` routes into the window's back stack. */
+class OnBackPressedDispatcher { fun onBackPressed() { BackDispatcher.dispatch() } }
+class OnBackPressedDispatcherOwner { val onBackPressedDispatcher = OnBackPressedDispatcher() }
+val LocalOnBackPressedDispatcherOwner = androidx.compose.runtime.staticCompositionLocalOf<OnBackPressedDispatcherOwner?> { OnBackPressedDispatcherOwner() }

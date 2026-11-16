@@ -9,6 +9,7 @@ inline fun <reified T : Any> Context.getSystemService(): T? = when (T::class) {
   android.app.NotificationManager::class -> getSystemService(Context.NOTIFICATION_SERVICE)
   android.net.ConnectivityManager::class -> getSystemService(Context.CONNECTIVITY_SERVICE)
   android.os.PowerManager::class -> getSystemService(Context.POWER_SERVICE)
+  android.content.ClipboardManager::class -> android.content.ClipboardManager()
   android.net.wifi.WifiManager::class -> getSystemService(Context.WIFI_SERVICE)
   else -> null
 } as T?

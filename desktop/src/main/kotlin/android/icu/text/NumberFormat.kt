@@ -2,6 +2,7 @@ package android.icu.text
 
 /** ICU's NumberFormat API over java.text.NumberFormat. */
 class NumberFormat private constructor(private val inner: java.text.NumberFormat) {
+  fun format(n: Number): String = inner.format(n)
   fun format(n: Long): String = inner.format(n)
   fun format(n: Double): String = inner.format(n)
   fun setMaximumFractionDigits(n: Int) { inner.maximumFractionDigits = n }

@@ -15,10 +15,12 @@ class Bitmap(val image: BufferedImage) {
   val height: Int get() = image.height
   var config: Config = Config.ARGB_8888
   val isRecycled: Boolean get() = false
+  var density: Int = 160
   fun recycle() {}
   fun hasAlpha(): Boolean = image.colorModel.hasAlpha()
   fun getPixel(x: Int, y: Int): Int = image.getRGB(x, y)
   fun setPixel(x: Int, y: Int, color: Int) = image.setRGB(x, y, color)
+  fun setPixels(pixels: IntArray, offset: Int, stride: Int, x: Int, y: Int, w: Int, h: Int) { image.setRGB(x, y, w, h, pixels, offset, stride) }
   fun getPixels(pixels: IntArray, offset: Int, stride: Int, x: Int, y: Int, w: Int, h: Int) {
     image.getRGB(x, y, w, h, pixels, offset, stride)
   }

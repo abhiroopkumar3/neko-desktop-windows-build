@@ -5,7 +5,10 @@ import android.content.Intent
 import android.view.Window
 
 /** Screens are Compose destinations on desktop; this base only keeps View-era type references compiling. */
-open class Activity : android.content.ContextWrapper(null) {
+open class Activity : android.content.ContextWrapper(null), androidx.lifecycle.LifecycleOwner {
+  override val lifecycle: androidx.lifecycle.Lifecycle = androidx.lifecycle.LifecycleRegistry(this).also { it.currentState = androidx.lifecycle.Lifecycle.State.RESUMED }
+  open fun finishAffinity() {}
+  open fun recreate() {}
   open var intent: Intent = Intent()
   open var title: CharSequence = ""
   val window: Window = Window()
@@ -15,5 +18,9 @@ open class Activity : android.content.ContextWrapper(null) {
   open fun overridePendingTransition(enter: Int, exit: Int) {}
   open fun overrideActivityTransition(type: Int, enter: Int, exit: Int) {}
   open fun onCreate(savedInstanceState: android.os.Bundle?) {}
+  open fun onResume() {}
+  open fun onPause() {}
+  open fun onDestroy() {}
+  open fun onNewIntent(intent: Intent) {}
   companion object { const val RESULT_OK = -1; const val RESULT_CANCELED = 0; const val OVERRIDE_TRANSITION_OPEN = 0; const val OVERRIDE_TRANSITION_CLOSE = 1 }
 }

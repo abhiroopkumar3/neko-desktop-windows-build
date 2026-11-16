@@ -1,0 +1,7 @@
+# Mechanical edits applied to the copied upstream sources (the files in the upstream repo stay untouched).
+# Format:  path-suffix ::: regex ::: replacement   ("*" matches every file). A rule that matches nothing fails the build,
+# so an upstream change that moves the code is noticed straight away.
+* ::: override fun <T : ViewModel> create\(modelClass: Class<T>\): T ::: override fun <T : ViewModel> create(modelClass: kotlin.reflect.KClass<T>, extras: androidx.lifecycle.viewmodel.CreationExtras): T
+* ::: ImageRequest\.Builder\((?:[\w.]*[cC]ontext(?:\.current)?)\) ::: ImageRequest.Builder(coil3.PlatformContext.INSTANCE)
+CoilSetup.kt ::: ImageLoader\.Builder\(context\) ::: ImageLoader.Builder(coil3.PlatformContext.INSTANCE)
+CoilSetup.kt ::: maxSizePercent\(context, ::: maxSizePercent(coil3.PlatformContext.INSTANCE,

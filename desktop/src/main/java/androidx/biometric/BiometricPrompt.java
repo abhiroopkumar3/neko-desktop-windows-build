@@ -24,6 +24,9 @@ public class BiometricPrompt {
         }
     }
 
+    @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.SOURCE)
+    public @interface AuthenticationError {}
+
     public static final int ERROR_HW_NOT_PRESENT = 12;
     public static final int ERROR_NEGATIVE_BUTTON = 13;
     public static final int ERROR_USER_CANCELED = 10;

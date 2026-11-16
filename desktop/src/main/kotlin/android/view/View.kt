@@ -16,7 +16,11 @@ class Window {
   fun addFlags(flags: Int) {}
 }
 
-object WindowManager {
+class WindowMetrics(val bounds: android.graphics.Rect)
+
+class WindowManager {
+  val currentWindowMetrics: WindowMetrics
+    get() = java.awt.Toolkit.getDefaultToolkit().screenSize.let { WindowMetrics(android.graphics.Rect(0, 0, it.width, it.height)) }
   class LayoutParams { companion object { const val FLAG_SECURE = 0x2000 } }
 }
 

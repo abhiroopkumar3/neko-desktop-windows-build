@@ -39,6 +39,13 @@ class Timber private constructor() {
 
     open fun wtf(t: Throwable?, message: String?, vararg args: Any?) = dispatch(7, t, message, args)
 
+    open fun v(t: Throwable?) = dispatch(2, t, null, emptyArray())
+    open fun d(t: Throwable?) = dispatch(3, t, null, emptyArray())
+    open fun i(t: Throwable?) = dispatch(4, t, null, emptyArray())
+    open fun w(t: Throwable?) = dispatch(5, t, null, emptyArray())
+    open fun e(t: Throwable?) = dispatch(6, t, null, emptyArray())
+    open fun wtf(t: Throwable?) = dispatch(7, t, null, emptyArray())
+
     open fun log(priority: Int, message: String?, vararg args: Any?) = dispatch(priority, null, message, args)
   }
 
@@ -59,7 +66,9 @@ class Timber private constructor() {
 
     @JvmStatic fun uprootAll() = trees.clear()
 
-    @JvmStatic fun treeCount(): Int = trees.size
+    @JvmStatic val treeCount: Int get() = trees.size
+    @JvmStatic fun forest(): List<Tree> = trees.toList()
+    @JvmStatic fun asTree(): Tree = this
 
     @JvmStatic fun tag(tag: String): Tree = this
 

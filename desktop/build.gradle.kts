@@ -35,6 +35,22 @@ val syncSharedSources by
         val includes = sharedList.filter { it.startsWith("$module/") }.map { it.removePrefix("$module/") }
         if (includes.isNotEmpty()) from(dir) { include(includes) }
       }
+      doLast {
+        // Apply patches.txt to the copied sources.
+        val root = layout.buildDirectory.dir("shared-src").get().asFile
+        val files = root.walkTopDown().filter { it.extension == "kt" }.toList()
+        file("patches.txt").readLines().filter { it.isNotBlank() && !it.startsWith("#") }.forEach { line ->
+          val (suffix, regex, replacement) = line.split(" ::: ")
+          val re = Regex(regex)
+          var hits = 0
+          files.filter { suffix == "*" || it.path.endsWith(suffix) }.forEach { f ->
+            val text = f.readText()
+            if (re.containsMatchIn(text)) { f.writeText(re.replace(text) { replacement }); hits++ }
+          }
+          // Only rules for a specific file must match: file lists shrink and grow while the port advances.
+          if (hits == 0 && suffix != "*" && files.any { it.path.endsWith(suffix) }) error("patch matched nothing: $line")
+        }
+      }
     }
 
 
@@ -47,7 +63,7 @@ val resValueFiles =
         file("../constants/src/main/res/values/strings.xml") to "strings.xml",
         file("../app/src/main/res/values/arrays.xml") to "arrays.xml",
     ) +
-        (file("../app/src/main/res/values").listFiles { f -> f.name.startsWith("colors") && f.extension == "xml" }
+        (file("../app/src/main/res/values").listFiles { f -> (f.name.startsWith("colors") || f.name.startsWith("ic_launcher")) && f.extension == "xml" }
             ?: emptyArray()).sortedBy { it.name }.map { it to it.name }
 
 // Upstream drawable/mipmap folders (qualifier dirs included); bundled so painterResource can load them.
@@ -178,6 +194,7 @@ dependencies {
   implementation("org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose:2.11.0")
   implementation("androidx.navigation3:navigation3-runtime:1.2.1")
   implementation("org.jetbrains.androidx.navigation3:navigation3-ui:1.2.0")
+  implementation("org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3:2.11.0")
   implementation("androidx.annotation:annotation:1.11.0")
 
   val coroutines = "1.11.0"

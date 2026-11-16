@@ -87,6 +87,8 @@ class Configuration private constructor() {
 }
 
 class WorkInfo(val id: UUID, val state: State, val tags: Set<String>, val progress: Data = Data.EMPTY, val outputData: Data = Data.EMPTY) {
+  val stopReason: Int get() = STOP_REASON_NOT_STOPPED
+  companion object { const val STOP_REASON_NOT_STOPPED = -256; const val STOP_REASON_UNKNOWN = -512; const val STOP_REASON_CANCELLED_BY_APP = 1 }
   enum class State { ENQUEUED, RUNNING, SUCCEEDED, FAILED, BLOCKED, CANCELLED;
     val isFinished: Boolean get() = this == SUCCEEDED || this == FAILED || this == CANCELLED }
 }
@@ -96,6 +98,7 @@ class ForegroundInfo(val notificationId: Int, val notification: android.app.Noti
 class WorkerParameters internal constructor(val id: UUID, val inputData: Data, val tags: Set<String>, val runAttemptCount: Int)
 
 abstract class ListenableWorker(val applicationContext: Context, val workerParams: WorkerParameters) {
+  val stopReason: Int get() = if (isStopped) WorkInfo.STOP_REASON_CANCELLED_BY_APP else WorkInfo.STOP_REASON_NOT_STOPPED
   val inputData: Data get() = workerParams.inputData
   val id: UUID get() = workerParams.id
   val tags: Set<String> get() = workerParams.tags
@@ -202,6 +205,9 @@ class WorkManager private constructor() {
   fun getWorkInfosByTag(tag: String): java.util.concurrent.Future<List<WorkInfo>> =
       java.util.concurrent.CompletableFuture.completedFuture(synchronized(lock) { entries.filter { tag in it.request.tags }.map { it.state.value } })
 
+  fun getWorkInfosForUniqueWorkLiveData(name: String): androidx.lifecycle.LiveData<List<WorkInfo>> = androidx.lifecycle.LiveData(getWorkInfosForUniqueWorkFlow(name))
+  fun getWorkInfos(query: WorkQuery): java.util.concurrent.Future<List<WorkInfo>> =
+      java.util.concurrent.CompletableFuture.completedFuture(synchronized(lock) { entries.filter { e -> query.tags.any { it in e.request.tags } && (query.states.isEmpty() || e.state.value.state in query.states) }.map { it.state.value } })
   fun getWorkInfosByTagFlow(tag: String): Flow<List<WorkInfo>> = changes.map { synchronized(lock) { entries.filter { tag in it.request.tags }.map { e -> e.state.value } } }
   fun getWorkInfosForUniqueWorkFlow(name: String): Flow<List<WorkInfo>> = changes.map { synchronized(lock) { listOfNotNull(unique[name]?.state?.value) } }
   fun getWorkInfosForUniqueWork(name: String): java.util.concurrent.Future<List<WorkInfo>> =

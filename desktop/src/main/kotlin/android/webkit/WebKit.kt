@@ -7,7 +7,7 @@ import java.io.InputStream
 import java.util.concurrent.ConcurrentHashMap
 
 class WebSettings {
-  var userAgentString: String = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
+  var userAgentString: String? = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
   var javaScriptEnabled = false
   var domStorageEnabled = false
   var blockNetworkImage = false
@@ -107,8 +107,8 @@ class WebStorage private constructor() {
 }
 
 class MimeTypeMap private constructor() {
-  fun getMimeTypeFromExtension(ext: String): String? = java.net.URLConnection.guessContentTypeFromName("x.$ext")
-  fun getExtensionFromMimeType(mime: String): String? = when (mime.lowercase()) {
+  fun getMimeTypeFromExtension(ext: String?): String? = java.net.URLConnection.guessContentTypeFromName("x.$ext")
+  fun getExtensionFromMimeType(mime: String?): String? = if (mime == null) null else when (mime.lowercase()) {
     "image/jpeg" -> "jpg"; "image/png" -> "png"; "image/gif" -> "gif"; "image/webp" -> "webp"; "application/zip" -> "zip"
     else -> mime.substringAfter('/', "").takeIf { it.isNotEmpty() }
   }

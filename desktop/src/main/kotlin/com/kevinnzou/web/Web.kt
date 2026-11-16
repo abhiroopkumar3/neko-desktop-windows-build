@@ -50,6 +50,7 @@ fun WebView(
     navigator: WebViewNavigator = rememberWebViewNavigator(),
     onCreated: (WebView) -> Unit = {},
     client: AccompanistWebViewClient = AccompanistWebViewClient(),
+    onDispose: (WebView) -> Unit = {},
 ) {
   remember { onCreated(WebView()); 0 }
   Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("The embedded browser is not part of this build yet.") }

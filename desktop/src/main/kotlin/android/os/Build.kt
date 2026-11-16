@@ -2,6 +2,7 @@ package android.os
 
 /** Desktop values for android.os.Build. SDK_INT reports a modern Android level so upstream feature checks take their current-API branch. */
 object Build {
+  const val DISPLAY = "desktop"
   object VERSION {
     const val SDK_INT = 34
     const val RELEASE = "14"

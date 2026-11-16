@@ -21,6 +21,8 @@ class NotificationManager {
   fun createNotificationChannelGroups(list: List<NotificationChannelGroup>) {}
   fun getNotificationChannel(id: String): NotificationChannel? = channels[id]
   fun deleteNotificationChannel(id: String) { channels.remove(id) }
+  fun notify(id: Int, notification: Notification) { org.nekomanga.desktop.platform.Notifier.show(id, notification) }
+  fun notify(tag: String?, id: Int, notification: Notification) = notify(id, notification)
   fun cancel(id: Int) {}
   fun cancelAll() {}
   companion object {

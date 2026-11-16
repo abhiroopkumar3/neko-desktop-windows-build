@@ -6,6 +6,7 @@ import java.io.InputStream
 import javax.imageio.ImageIO
 
 object BitmapDecoding {
+  @JvmStatic fun decodeResource(res: Resources?, id: Int): Bitmap? = org.nekomanga.desktop.res.DrawableLoader.bitmapOrNull(id)
   @JvmStatic
   fun decodeStream(stream: InputStream?, opts: BitmapFactory.Options?): Bitmap? {
     stream ?: return null

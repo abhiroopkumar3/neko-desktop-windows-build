@@ -29,7 +29,7 @@ object NotificationCompat {
     fun setSummaryText(t: CharSequence?) = this
   }
 
-  class Builder(val context: Context?, val channelId: String?) {
+  class Builder(val context: Context, val channelId: String?) {
     private var title: CharSequence? = null
     private var text: CharSequence? = null
     private var content: PendingIntent? = null
@@ -42,6 +42,19 @@ object NotificationCompat {
     fun setOnlyAlertOnce(v: Boolean) = this
     fun setPriority(p: Int) = this
     fun setColor(c: Int) = this
+    var color: Int = 0
+    var priority: Int = 0
+    fun setTimeoutAfter(ms: Long) = this
+    fun setWhen(ms: Long) = this
+    fun setLights(c: Int, on: Int, off: Int) = this
+    fun setSound(u: Any?) = this
+    fun setVibrate(p: LongArray?) = this
+    fun setLocalOnly(v: Boolean) = this
+    fun setVisibility(v: Int) = this
+    fun setDefaults(v: Int) = this
+    fun setNumber(v: Int) = this
+    fun setUsesChronometer(v: Boolean) = this
+    fun setForegroundServiceBehavior(v: Int) = this
     fun setCategory(c: String?) = this
     fun setGroup(g: String?) = this
     fun setGroupSummary(v: Boolean) = this

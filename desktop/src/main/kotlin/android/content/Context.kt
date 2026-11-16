@@ -24,11 +24,23 @@ open class Context {
 
   fun getDir(name: String, mode: Int = 0): File = File(AppPaths.home, name).also { it.mkdirs() }
 
+  @Suppress("UNCHECKED_CAST")
+  fun <T : Any> getSystemService(cls: Class<T>): T = when (cls) {
+    android.net.ConnectivityManager::class.java -> getSystemService(CONNECTIVITY_SERVICE)
+    android.app.NotificationManager::class.java -> getSystemService(NOTIFICATION_SERVICE)
+    android.os.PowerManager::class.java -> getSystemService(POWER_SERVICE)
+    android.net.wifi.WifiManager::class.java -> getSystemService(WIFI_SERVICE)
+    android.content.ClipboardManager::class.java -> getSystemService(CLIPBOARD_SERVICE)
+    else -> throw IllegalStateException("No desktop service for ${cls.name}")
+  } as T
+
   open fun getSystemService(name: String): Any? = when (name) {
     NOTIFICATION_SERVICE -> android.app.NotificationManager()
     CONNECTIVITY_SERVICE -> connectivity
     POWER_SERVICE -> android.os.PowerManager()
     WIFI_SERVICE -> android.net.wifi.WifiManager()
+    WINDOW_SERVICE -> android.view.WindowManager()
+    CLIPBOARD_SERVICE -> clipboard
     else -> null
   }
 
@@ -40,6 +52,8 @@ open class Context {
   val theme: Any? get() = null
   fun getDatabasePath(name: String): File = File(File(AppPaths.home, "databases").also { it.mkdirs() }, name)
   val applicationInfo: android.content.pm.ApplicationInfo get() = android.content.pm.ApplicationInfo()
+  fun getExternalFilesDirs(type: String?): Array<File?> = arrayOf(getExternalFilesDir(type))
+  val dataDir: File get() = AppPaths.home
   fun getExternalFilesDir(type: String?): File? = File(AppPaths.files, type ?: "external").also { it.mkdirs() }
 
   /** Hands links and files to the Windows shell; in-app navigation goes through the navigator instead. */
@@ -67,6 +81,9 @@ open class Context {
     const val CONNECTIVITY_SERVICE = "connectivity"
     const val POWER_SERVICE = "power"
     const val WIFI_SERVICE = "wifi"
+    const val WINDOW_SERVICE = "window"
+    const val CLIPBOARD_SERVICE = "clipboard"
+    private val clipboard by lazy { ClipboardManager() }
     private val connectivity by lazy { android.net.ConnectivityManager() }
     private val sharedPreferenceCache = java.util.concurrent.ConcurrentHashMap<String, SharedPreferences>()
   }
