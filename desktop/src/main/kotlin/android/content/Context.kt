@@ -37,4 +37,4 @@ open class Context {
 }
 
 /** Process-wide context used wherever upstream code asks for an application context. */
-object DesktopContext : Context()
+object DesktopContext : android.app.Application()

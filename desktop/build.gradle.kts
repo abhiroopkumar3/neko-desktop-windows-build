@@ -50,13 +50,18 @@ val resValueFiles =
         (file("../app/src/main/res/values").listFiles { f -> f.name.startsWith("colors") && f.extension == "xml" }
             ?: emptyArray()).sortedBy { it.name }.map { it to it.name }
 
+// Upstream drawable/mipmap folders (qualifier dirs included); bundled so painterResource can load them.
+val appResDir = file("../app/src/main/res")
+val imageResDirs = appResDir.listFiles { f -> f.isDirectory && (f.name.startsWith("drawable") || f.name.startsWith("mipmap")) }?.sortedBy { it.name } ?: emptyList()
+
 val generateRShim by
     tasks.registering {
       val outDir = layout.buildDirectory.dir("generated-r")
       inputs.files(resValueFiles.map { it.first })
+      inputs.files(imageResDirs)
       outputs.dir(outDir)
       doLast {
-        val names = mapOf("string" to sortedSetOf<String>(), "plurals" to sortedSetOf<String>(), "array" to sortedSetOf<String>(), "color" to sortedSetOf<String>())
+        val names = mapOf("string" to sortedSetOf<String>(), "plurals" to sortedSetOf<String>(), "array" to sortedSetOf<String>(), "color" to sortedSetOf<String>(), "drawable" to sortedSetOf<String>(), "mipmap" to sortedSetOf<String>())
         val tagToType = mapOf("string" to "string", "plurals" to "plurals", "string-array" to "array", "color" to "color")
         val factory = javax.xml.parsers.DocumentBuilderFactory.newInstance()
         resValueFiles.forEach { (f, _) ->
@@ -67,7 +72,11 @@ val generateRShim by
             names.getValue(type).add(e.getAttribute("name").replace('.', '_'))
           }
         }
-        val bases = mapOf("string" to 0x7f120000, "plurals" to 0x7f130000, "array" to 0x7f030000, "color" to 0x7f060000)
+        imageResDirs.forEach { d ->
+          val type = if (d.name.startsWith("mipmap")) "mipmap" else "drawable"
+          d.listFiles()?.forEach { f -> names.getValue(type).add(f.nameWithoutExtension.replace('.', '_')) }
+        }
+        val bases = mapOf("string" to 0x7f120000, "plurals" to 0x7f130000, "array" to 0x7f030000, "color" to 0x7f060000, "drawable" to 0x7f080000, "mipmap" to 0x7f0d0000)
         val dir = outDir.get().asFile.also { it.deleteRecursively(); it.mkdirs() }
         // Upstream has one R class per Gradle module; they all see the same ids here.
         listOf("org.nekomanga", "org.nekomanga.core", "org.nekomanga.constants").forEach { pkg ->
@@ -97,6 +106,7 @@ val generateRShim by
 
 tasks.processResources {
   resValueFiles.forEach { (f, name) -> from(f) { into("android-res"); rename { name } } }
+  imageResDirs.forEach { d -> from(d) { into("android-res/img/${d.name}") } }
 }
 
 kotlin {

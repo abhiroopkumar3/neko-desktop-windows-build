@@ -28,6 +28,9 @@ open class Bundle() {
   fun getLongArray(k: String?): LongArray? = map[k] as? LongArray
   fun getBundle(k: String?): Bundle? = map[k] as? Bundle
 
+  fun putAny(k: String, v: Any?) { map[k] = v }
+  fun getAny(k: String?): Any? = map[k]
+  fun putAll(other: Bundle) { map.putAll(other.map) }
   fun containsKey(k: String?): Boolean = map.containsKey(k)
   fun remove(k: String?) { map.remove(k) }
   fun clear() = map.clear()
