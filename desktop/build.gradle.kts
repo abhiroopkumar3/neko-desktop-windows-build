@@ -256,7 +256,7 @@ dependencies {
 
 compose.desktop {
   application {
-    mainClass = "org.nekomanga.desktop.MainKt"
+    mainClass = "org.nekomanga.desktop.DesktopMainKt"
 
     nativeDistributions {
       targetFormats(TargetFormat.Exe, TargetFormat.Msi)
